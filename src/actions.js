@@ -1,25 +1,23 @@
 import request from 'superagent';
+import config from './config';
 
-export function getTranslations() {
+function createRequest(path, activeLanguage = 'en') {
+  console.log('activeLanguage', activeLanguage);
   return new Promise((resolve) => {
     request
-        .get('http://new.whoer.net/v2/translations')
-        .auth('test123', 'supersecret')
-        .set('Accept-Language', 'ru')
+        .get(`${config.host}/${path}`)
+        .auth(config.username, config.password)
+        .set('Accept-Language', activeLanguage)
         .end((err, res) => {
           resolve(res.body);
         });
   });
 }
 
+export function getTranslations(activeLanguage) {
+  return createRequest('translations', activeLanguage)
+}
+
 export function getLanguages() {
-  return new Promise((resolve) => {
-    request
-        .get('http://new.whoer.net/v2/languages')
-        .auth('test123', 'supersecret')
-        .set('Accept-Language', 'ru')
-        .end((err, res) => {
-          resolve(res.body);
-        });
-  });
+  return createRequest('languages');
 }

@@ -8,23 +8,22 @@ import './App.css';
 @inject('store')
 @observer
 export default class App extends Component {
-  state = {
-    selectedLanguage: 'en'
-  };
 
   componentDidMount() {
     this.props.store.loadTranslations();
     this.props.store.loadLanguages();
   }
 
-  render() {
+  onLanguageChange = (activeLanguage) => {
+    this.props.store.setActiveLanguage(activeLanguage);
+    this.props.store.loadTranslations();
+  };
 
+  render() {
     const {
-      state: {
-        selectedLanguage
-      },
       props: {
         store: {
+          activeLanguage,
           languages,
           translations,
           translationsLoading,
@@ -34,8 +33,9 @@ export default class App extends Component {
 
     return (
         <div className="App">
-          <Select defaultValue={selectedLanguage}
-                  style={{width: 120}}>
+          <Select defaultValue={activeLanguage}
+                  style={{width: 120}}
+                  onChange={this.onLanguageChange}>
             {languages.map((language) => {
               return <Select.Option value={language.code}>{language.name}</Select.Option>
             })}
