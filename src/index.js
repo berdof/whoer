@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'antd/dist/antd.css';
+import {Provider} from 'mobx-react';
+
 import './index.css';
 import App from './App';
-import 'antd/dist/antd.css';
-
+import Store from './store'
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={new Store()}>
+      <App/>
+    </Provider>
+    , document.getElementById('root'));
 registerServiceWorker();

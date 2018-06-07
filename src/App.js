@@ -1,29 +1,16 @@
 import React, {Component} from 'react';
 import {Table, Button} from 'antd';
-import {getTranslations} from './actions';
+import {observer, inject} from 'mobx-react';
+
 import './App.css';
 
-class App extends Component {
-  state = {
-    translations: []
-  };
+@inject('store')
+@observer
+export default class App extends Component {
 
   componentDidMount() {
-    this.loadData();
-    this.loadTranslates();
+    this.props.store.loadTranslations();
   }
-
-  loadData = () => {
-    fetch('http://new.whoer.net/v2/languages');
-  };
-
-  loadTranslates = async () => {
-    const translations = await getTranslations();
-
-    this.setState({
-      translations
-    })
-  };
 
   render() {
     const columns = [{
@@ -50,14 +37,13 @@ class App extends Component {
 
     return (
         <div className="App">
-          <Button type="primary">
+          <Button type="primary" onClick={this.props.store.loadTranslations}>
             Load
           </Button>
-          <Table dataSource={this.state.translations}
+          <Table dataSource={this.props.store.translationsLoading ? [] : this.props.store.translations}
+                 loading={this.props.store.translationsLoading}
                  columns={columns}/>
         </div>
     );
   }
 }
-
-export default App;
