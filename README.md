@@ -2452,7 +2452,7 @@ curl -v \
   http://new.whoer.net/v2/translation
   
   curl -v \
-    -u test123:supersecret \
+    -u username:password \
     -H "Accept-Language: ru" \
     -H "Origin: http://new.whoer.net" \
     http://new.whoer.net/v2/translations/
