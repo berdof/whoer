@@ -2442,3 +2442,17 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
+
+
+curl -v \
+  -u test123:supersecret \
+  -H "Accept-Language: en" \
+  -H "Origin: http://new.whoer.net" \
+  -X POST -d '{"name":"test","snippet":"Test"}' \
+  http://new.whoer.net/v2/translation
+  
+  curl -v \
+    -u test123:supersecret \
+    -H "Accept-Language: ru" \
+    -H "Origin: http://new.whoer.net" \
+    http://new.whoer.net/v2/translations/
