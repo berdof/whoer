@@ -106,7 +106,8 @@ export default class App extends Component {
           </Layout.Header>
           <Layout.Content>
             <TranslationsList dataSource={translationsLoading ? [] : translations}
-                              loading={translationsLoading}/>
+                              loading={translationsLoading}
+                              onDeleteRow={this.props.store.deleteTranslation}/>
             <ModalAddTranslation visible={modalVisible}
                                  name={newTranslation.name}
                                  snippet={newTranslation.snippet}

@@ -10,7 +10,7 @@ function createRequest(path, type = 'get', params, activeLanguage = 'en') {
     const newRequest = request[requestType](`${config.host}/${path}`);
     if (requestType === 'get') {
       newRequest.query(params)
-    } else {
+    } else if (requestType === 'post' || requestType === 'put') {
       newRequest.send(params).type('form');
     }
     newRequest
@@ -38,6 +38,10 @@ function getLanguages() {
 
 function addTranslation(translation) {
   return createRequest('translation', 'post', translation);
+}
+
+function deleteTranslation(translationId) {
+  return createRequest(`translation/${translationId}`, 'delete', {});
 }
 
 export default class Store {
@@ -79,5 +83,13 @@ export default class Store {
       name,
       snippet
     })
+  }
+
+  @action.bound
+  deleteTranslation(translation) {
+    this.translations = this.translations.filter((translationToFind) => {
+      return translationToFind.id !== translation.id;
+    });
+    deleteTranslation(translation.id);
   }
 }
