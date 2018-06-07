@@ -1,7 +1,8 @@
 import {observable, action} from 'mobx';
-import {getTranslations} from './actions';
+import {getTranslations, getLanguages} from './actions';
 
 export default class Store {
+  @observable languages = [];
   @observable translations = [];
   @observable translationsLoading = true;
 
@@ -14,5 +15,14 @@ export default class Store {
       key: translation.id
     })));
     this.translationsLoading = false;
+  }
+
+  @action.bound
+  async loadLanguages() {
+    const languages = await getLanguages();
+    this.languages.replace(languages.map((language) => ({
+      ...language,
+      key: language.code
+    })));
   }
 }

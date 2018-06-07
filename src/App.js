@@ -1,48 +1,47 @@
 import React, {Component} from 'react';
-import {Table, Button} from 'antd';
+import {Table, Button, Select} from 'antd';
 import {observer, inject} from 'mobx-react';
 
+import TranslationsList from './components/TranslationsList';
 import './App.css';
 
 @inject('store')
 @observer
 export default class App extends Component {
+  state = {
+    selectedLanguage: 'en'
+  };
 
   componentDidMount() {
     this.props.store.loadTranslations();
+    this.props.store.loadLanguages();
   }
 
   render() {
-    const columns = [{
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-    }, {
-      title: 'name',
-      dataIndex: 'name',
-      key: 'name',
-    }, {
-      title: 'snippet',
-      dataIndex: 'snippet',
-      key: 'snippet',
-    }, {
-      title: 'created',
-      dataIndex: 'created',
-      key: 'created',
-    }, {
-      title: 'updated',
-      dataIndex: 'updated',
-      key: 'updated',
-    }];
+
+    const {
+      state: {
+        selectedLanguage
+      },
+      props: {
+        store: {
+          languages,
+          translations,
+          translationsLoading,
+        }
+      }
+    } = this;
 
     return (
         <div className="App">
-          <Button type="primary" onClick={this.props.store.loadTranslations}>
-            Load
-          </Button>
-          <Table dataSource={this.props.store.translationsLoading ? [] : this.props.store.translations}
-                 loading={this.props.store.translationsLoading}
-                 columns={columns}/>
+          <Select defaultValue={selectedLanguage}
+                  style={{width: 120}}>
+            {languages.map((language) => {
+              return <Select.Option value={language.code}>{language.name}</Select.Option>
+            })}
+          </Select>
+          <TranslationsList dataSource={translationsLoading ? [] : translations}
+                            loading={translationsLoading}/>
         </div>
     );
   }
