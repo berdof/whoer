@@ -12,6 +12,7 @@ export default class ModalAddTranslation extends Component {
     visible: PropTypes.bool.isRequired,
     snippet: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    actionType: PropTypes.oneOf(['add', 'edit']).isRequired,
   };
 
   constructor(props) {
@@ -27,23 +28,26 @@ export default class ModalAddTranslation extends Component {
         onOk,
         onCancel,
         snippet,
-        name
+        name,
+        actionType
       }
     } = this;
 
+    const title = actionType === 'edit' ? 'Давай изменим запись, окей' : 'Давай создадим новый перевод';
+
     return (
-        <Modal title="Давай создадим новый перевод"
+        <Modal title={title}
                wrapClassName="vertical-center-modal"
-               okText="Создать"
+               okText="Сохранить"
                cancelText="Скрыть"
                visible={visible}
                onOk={onOk}
                onCancel={onCancel}>
-          <div className="row">
+          {actionType === 'add' && <div className="row">
             <Input placeholder="Name"
                    value={name}
                    onChange={this.onChangeName}/>
-          </div>
+          </div>}
           <div className="row">
             <Input placeholder="Snippet"
                    value={snippet}

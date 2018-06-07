@@ -16,7 +16,8 @@ const newTranslation = {
 export default class App extends Component {
   state = {
     modalVisible: false,
-    newTranslation
+    newTranslation,
+    modalActionType: 'add'
   };
 
   componentDidMount() {
@@ -38,24 +39,36 @@ export default class App extends Component {
   hideModal = () => {
     this.setState({
       modalVisible: false
+    }, () => {
+      // need to use callback to avoid inputs flickering during modal hiding animation
+      this.setState({
+        modalActionType: 'add',
+        newTranslation
+      });
     });
   };
 
-  onAddTranslation = () => {
-    const {
-      state: {
-        newTranslation: {
-          name, snippet
-        }
-      }
-    } = this;
-
-    this.props.store.addTranslation(name, snippet);
-
-    this.hideModal();
+  onAddTranslation = ({name, snippet}) => {
     this.setState({
-      newTranslation
+      modalActionType: 'add'
+    }, () => {
+      this.props.store.addTranslation(name, snippet);
+      this.hideModal();
+      this.setState({
+        newTranslation
+      });
+    })
+  };
+
+  onEditTranslation = ({name, snippet}) => {
+    this.setState({
+      modalActionType: 'edit',
+      newTranslation: {
+        name,
+        snippet
+      }
     });
+    this.showModal();
   };
 
   onChangeModalInputText = (fieldName, event) => {
@@ -67,11 +80,26 @@ export default class App extends Component {
     });
   };
 
+  onSubmitModalAddTranslation = () => {
+    const {
+      state: {
+        newTranslation
+      }
+    } = this;
+
+    if (this.state.modalActionType === 'edit') {
+      this.onEditTranslation(newTranslation);
+    } else {
+      this.onAddTranslation(newTranslation);
+    }
+  };
+
   render() {
     const {
       state: {
         modalVisible,
-        newTranslation
+        newTranslation,
+        modalActionType
       },
       props: {
         store: {
@@ -107,12 +135,14 @@ export default class App extends Component {
           <Layout.Content>
             <TranslationsList dataSource={translationsLoading ? [] : translations}
                               loading={translationsLoading}
+                              onEditRow={this.onEditTranslation}
                               onDeleteRow={this.props.store.deleteTranslation}/>
             <ModalAddTranslation visible={modalVisible}
                                  name={newTranslation.name}
                                  snippet={newTranslation.snippet}
+                                 actionType={modalActionType}
                                  onChangeModalInputText={this.onChangeModalInputText}
-                                 onOk={this.onAddTranslation}
+                                 onOk={this.onSubmitModalAddTranslation}
                                  onCancel={this.hideModal}/>
           </Layout.Content>
         </div>

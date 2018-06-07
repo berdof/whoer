@@ -1,0 +1,12 @@
+.iconWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.icon {
+  cursor: pointer;
+  margin-right: 5px;
+  padding: 5px;
+}

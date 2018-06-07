@@ -9,8 +9,9 @@ import './TranslationsList.css';
 export default class TranslationsList extends Component {
   static propTypes = {
     onDeleteRow: PropTypes.func.isRequired,
+    onEditRow: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    dataSource: PropTypes.array.isRequired
+    dataSource: PropTypes.array.isRequired,
   };
 
   constructor(props) {
@@ -40,10 +41,18 @@ export default class TranslationsList extends Component {
       dataIndex: 'operation',
       render: (text, record) => {
         return (
-            <Popconfirm title="Точно удаляем?"
-                        onConfirm={this.props.onDeleteRow.bind(this, record)}>
-              <Icon type="delete" />
-            </Popconfirm>
+            <div className="iconWrap">
+              <Popconfirm title="Точно удаляем?"
+                          onConfirm={this.props.onDeleteRow.bind(this, record)}>
+                <div className="icon">
+                  <Icon type="delete"/>
+                </div>
+              </Popconfirm>
+              <div className="icon"
+                   onClick={this.props.onEditRow.bind(this, record)}>
+                <Icon type="edit"/>
+              </div>
+            </div>
         );
       },
     }];
