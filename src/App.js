@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Button, Select} from 'antd';
+import {Table, Button, Layout, Select} from 'antd';
 import {observer, inject} from 'mobx-react';
 
 import TranslationsList from './components/TranslationsList';
@@ -32,16 +32,22 @@ export default class App extends Component {
     } = this;
 
     return (
-        <div className="App">
-          <Select defaultValue={activeLanguage}
-                  style={{width: 120}}
-                  onChange={this.onLanguageChange}>
-            {languages.map((language) => {
-              return <Select.Option value={language.code}>{language.name}</Select.Option>
-            })}
-          </Select>
-          <TranslationsList dataSource={translationsLoading ? [] : translations}
-                            loading={translationsLoading}/>
+        <div>
+          <Layout.Header className="header">
+            <Layout.Sider className="headerLeft">
+              <Select defaultValue={activeLanguage}
+                      style={{width: 120}}
+                      onChange={this.onLanguageChange}>
+                {languages.map((language) => {
+                  return <Select.Option value={language.code}>{language.name}</Select.Option>
+                })}
+              </Select>
+            </Layout.Sider>
+          </Layout.Header>
+          <Layout.Content>
+            <TranslationsList dataSource={translationsLoading ? [] : translations}
+                              loading={translationsLoading}/>
+          </Layout.Content>
         </div>
     );
   }
