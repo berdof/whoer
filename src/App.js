@@ -34,15 +34,17 @@ export default class App extends Component {
     return (
         <div>
           <Layout.Header className="header">
-            <Layout.Sider className="headerLeft">
+            <div className="logo">WhoerLangs</div>
+            <div className="headerRight">
+              <Button type="primary">Создать перевод</Button>
               <Select defaultValue={activeLanguage}
-                      style={{width: 120}}
+                      style={{width: 100}}
                       onChange={this.onLanguageChange}>
                 {languages.map((language) => {
                   return <Select.Option value={language.code}>{language.name}</Select.Option>
                 })}
               </Select>
-            </Layout.Sider>
+            </div>
           </Layout.Header>
           <Layout.Content>
             <TranslationsList dataSource={translationsLoading ? [] : translations}
