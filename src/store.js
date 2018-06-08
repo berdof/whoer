@@ -40,6 +40,11 @@ function addTranslation(translation) {
   return createRequest('translation', 'post', translation);
 }
 
+
+function editTranslation(translation) {
+  return createRequest(`translation/${translation.id}`, 'put', translation);
+}
+
 function deleteTranslation(translationId) {
   return createRequest(`translation/${translationId}`, 'delete', {});
 }
@@ -80,6 +85,15 @@ export default class Store {
   @action.bound
   addTranslation(name, snippet) {
     return addTranslation({
+      name,
+      snippet
+    })
+  }
+
+  @action.bound
+  editTranslation(id, name, snippet) {
+    return editTranslation({
+      id,
       name,
       snippet
     })

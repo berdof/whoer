@@ -37,13 +37,16 @@ export default class App extends Component {
   };
 
   hideModal = () => {
-    this.setState({
-      modalVisible: false
-    }, () => {
-      // need to use callback to avoid inputs flickering during modal hiding animation
+    return new Promise((resolve) => {
       this.setState({
-        modalActionType: 'add',
-        newTranslation
+        modalVisible: false
+      }, () => {
+        resolve(true);
+        // need to use callback to avoid inputs flickering during modal hiding animation
+        this.setState({
+          modalActionType: 'add',
+          newTranslation
+        });
       });
     });
   };
@@ -60,10 +63,19 @@ export default class App extends Component {
     })
   };
 
-  onEditTranslation = ({name, snippet}) => {
+  onEditTranslation = async ({id, name, snippet}) => {
+    this.props.store.editTranslation(id, name, snippet);
+    await this.hideModal();
+    this.setState({
+      newTranslation
+    });
+  };
+
+  onSelectTranslation = ({id, name, snippet}) => {
     this.setState({
       modalActionType: 'edit',
       newTranslation: {
+        id,
         name,
         snippet
       }
@@ -135,7 +147,7 @@ export default class App extends Component {
           <Layout.Content>
             <TranslationsList dataSource={translationsLoading ? [] : translations}
                               loading={translationsLoading}
-                              onEditRow={this.onEditTranslation}
+                              onEditRow={this.onSelectTranslation}
                               onDeleteRow={this.props.store.deleteTranslation}/>
             <ModalAddTranslation visible={modalVisible}
                                  name={newTranslation.name}
